@@ -41,35 +41,45 @@ function AuthProvider({ children }) {
   }
 
   const login = async (email, password) => {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
-    const data = await res.json()
-    if (data.success) {
-      localStorage.setItem('token', data.token)
-      setToken(data.token)
-      setUser(data.user)
-      return { success: true }
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      const data = await res.json()
+      if (data.success) {
+        localStorage.setItem('token', data.token)
+        setToken(data.token)
+        setUser(data.user)
+        return { success: true }
+      }
+      return { success: false, message: data.message }
+    } catch (error) {
+      console.error('Login error:', error)
+      return { success: false, message: 'Login failed. Please try again.' }
     }
-    return { success: false, message: data.message }
   }
 
   const register = async (username, email, password) => {
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password })
-    })
-    const data = await res.json()
-    if (data.success) {
-      localStorage.setItem('token', data.token)
-      setToken(data.token)
-      setUser(data.user)
-      return { success: true }
+    try {
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      })
+      const data = await res.json()
+      if (data.success) {
+        localStorage.setItem('token', data.token)
+        setToken(data.token)
+        setUser(data.user)
+        return { success: true }
+      }
+      return { success: false, message: data.message }
+    } catch (error) {
+      console.error('Registration error:', error)
+      return { success: false, message: 'Registration failed. Please try again.' }
     }
-    return { success: false, message: data.message }
   }
 
   const logout = () => {
